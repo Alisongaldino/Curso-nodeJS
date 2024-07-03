@@ -11,26 +11,23 @@ import http from 'node:http'
 // POST / users => criar usuario
 
 const users = []
+const server = http.createServer((request, response) => {
+    const {method, url} = request
 
-const server = http.createServer((req,res) => {
-    const { method, url } = req
-
-    if (method == 'GET' && url == '/users') {
-        return res
-        .setHeader('Content-type', 'application/json')
-        .end (JSON.stringify(users))
+    if (method == 'GET' && url == '/users'){
+        return response.end(JSON.stringify(users))
     }
-  
-    if (method == 'POST' && url == '/users') {
+    if (method == 'POST' && url == '/users'){
         users.push({
             id: 1,
-            name:'nara',
-            email: 'naralinda@gmail.com',
+            name: 'NARA',
+            email: 'narada@gmail.com'
+
         })
-        return res.writeHead(201).end()
+        return response.end('criação dos usuários')
     }
 
-    return res.writeHead(404).end()
-})
+    return response.end('Hello World')
 
+})
 server.listen(3333)

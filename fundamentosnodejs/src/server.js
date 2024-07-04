@@ -27,7 +27,7 @@ const server = http.createServer((request, response) => {
         return response.end('criação dos usuários')
     }
 
-    return response.end('Hello World')
+    return response.end('Server ON')
 
 })
 server.listen(3333)

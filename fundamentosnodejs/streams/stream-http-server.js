@@ -12,10 +12,10 @@ class InverseNumberstream extends Transform {
 }
 
 
-const server = http.createServer(async (req, res) => {
+const server = http.createServer(async (request, response) => {
     const buffers = []
 
-    for await (const chunk of req) {
+    for await (const chunk of request) {
         buffers.push(chunk)
     }
 

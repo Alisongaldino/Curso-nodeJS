@@ -1,30 +1,8 @@
 import http from 'node:http'
-import { randomUUID } from 'node:crypto'
 import { json } from './middlewares/json.js'
-import { Database } from './database.js'
+import { routes } from './routes.js'
 
-//criar um usuário (nome, email, senha)
-// listar usuario 
-//edição de usuario
-//remoção de usuario
 
-//HTTP
-    //METODO
-    //URL
-
-    // Vimos que o cliente envia uma Request (requisição) ao servidor. Essa requisição possui todas as informações acerca do que o cliente espera receber de volta. O servidor web ao receber essas informações precisa enviar uma resposta ao cliente, nesse ponto entra a Response
-
-// GET -- sempre que vou buscar uma informação do backend
-// POST -- criar um recurso no banckend, 
-// post /users -- criar um usuario no backend
-// PUT --atualizar um recurso no backend, 
-// PATCH => atualizar uma informação especifica de um recurso backend
-// DELETE -- deletar um recurso no backend
-
-//JSON => estrutura de dados, conseguimos representar arrays, objetos... varias coiass dentro de uma string
-
-// HTTP status code ---
-const database = new Database()
 
 const server = http.createServer(async(request, response) => {
     const {method, url} = request
@@ -32,27 +10,16 @@ const server = http.createServer(async(request, response) => {
 
     await json(request, response)
 
+    const route = routes.find(route => {
+        return route.method == method && route.path == url
+    })
 
-    if (method == 'GET' && url == '/users'){
-        const users = database.select('users')
-
-        return response.end(JSON.stringify(users))
-    }
-    if (method == 'POST' && url == '/users'){
-
-        const { name, email} = request.body
-
-        const user = {
-            id: randomUUID(),
-            name,
-            email,
-
+        if (route) {
+            return route.handler(request, response)
         }
-        database.insert('users', user)
-        return response.writeHead(201).end()
-    }
+        return response.writeHead(404).end()
+    
 
-    return response.end('Hello World')
 
 })
 server.listen(3333)

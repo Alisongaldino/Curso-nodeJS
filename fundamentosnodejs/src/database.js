@@ -36,12 +36,12 @@ export class Database {
         return data;
     }
 
-    delete(table, id){
-        const rowIndex = this.#database[table].findIndex(row => row.id == id)
+    delete(table, id, name){
+        const rowIndex = this.#database[table].findIndex(row => row.id, name == id, name)
 
         if (rowIndex > -1){
             this.#database[table].splice(rowIndex, 1)
-            this.#persist
+            this.#persist()
         }
 
 
